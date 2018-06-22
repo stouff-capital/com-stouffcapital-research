@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-wordpress-research
+  annotations:
+    kubernetes.io/tls-acme: "true" # enable certificates
+    kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/proxy-body-size: "64m"
+    nginx.org/proxy-connect-timeout: "300s"
+    nginx.org/proxy-read-timeout: "120s"
+    nginx.org/client-max-body-size: "64m"
+spec:
+  tls:
+  - hosts:
+    - research.stouffcapital.com
+    secretName: research-stouffcapital-service-tls
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: research.stouffcapital.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: wordpress
+          servicePort: 80
+
