@@ -11,8 +11,6 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "64m"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300s"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "120s"
-    
-    nginx.org/client-max-body-size: "64m"
 spec:
   tls:
   - hosts:
