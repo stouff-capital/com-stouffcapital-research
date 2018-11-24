@@ -1,38 +1,38 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress
+  name: wordpress-research
+  namespace: websites
   labels:
-    app: wordpress
+    app: wordpress-research
 spec:
   ports:
   - port: 80
   selector:
-    app: wordpress
-    tier: frontend
-  type: NodePort
+    app: wordpress-research
+  clusterIP: None
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: wordpress
+  name: wordpress-research
+  namespace: websites
   labels:
-    app: wordpress
+    app: wordpress-research
 spec:
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
-        tier: frontend
+        app: wordpress-research
     spec:
       containers:
-      - image: wordpress:4.9.7-apache
+      - image: wordpress:4.9.8-apache
         name: wordpress
         env:
         - name: WORDPRESS_DB_HOST
-          value: wordpress-mysql
+          value: wordpress-research-mysql
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -42,15 +42,15 @@ spec:
         - containerPort: 80
           name: wordpress
         volumeMounts:
-        - name: wordpress-persistent-storage
+        - name: wordpress-research-persistent-storage
           mountPath: /var/www/html
         - name: uploads-ini
           mountPath: /usr/local/etc/php/conf.d/uploads.ini
           subPath: uploads.ini
       volumes:
-      - name: wordpress-persistent-storage
+      - name: wordpress-research-persistent-storage
         persistentVolumeClaim:
-          claimName: wp-pv-claim
+          claimName: wp-research-pv-claim
       - name: uploads-ini
         configMap:
           name: uploads-ini
